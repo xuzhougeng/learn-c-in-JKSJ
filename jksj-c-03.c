@@ -53,7 +53,7 @@ int main ()
 				//能被400整除 x % 400 = 0
 				//能被4整除，但不能被100整除 x % 4 = 0, x %100 !=0
 			case 2:
-				if ( (year % 400 == 0) | (year % 4 == 0 & year % 100 !=0) ){
+				if ( (year % 400 == 0) || (year % 4 == 0 && year % 100 !=0) ){
 					if (day > 29){
 						printf("illegal format!\n");
 						printf("please enther the start day in format year month day: \n");
