@@ -12,7 +12,7 @@
  */
 
 
-int main()                                          
+int main(int argc, char *argv[])                                          
 {                                                   
     // how many digit to keep                       
     int n;                                          
