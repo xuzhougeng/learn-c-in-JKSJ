@@ -1,0 +1,87 @@
+#include <stdio.h>
+#include <stdarg.h>
+
+/* 知识点:
+ *  '2' - '0' 就是将相关点数字字符转成对应的数字
+ *   因为'0'对应的是48, '2'对应的是50, 所以50-48=2   
+ *
+ */
+
+/*
+ * myscanf是一个模仿scanf的练习函数
+ * 它假定字符串里面都是数字，并且用空格分隔
+ * 举个例子"-123 12"应该获取-123 和 12
+ * 写代码遇到的几个思考
+ *   - 如何在流处理过程中，将字符串转成数字
+ *   - 如何处理正负号
+ *   - 如何处理不当的输入
+ *     - 可能存在两个空格作为分隔副
+ *     - 可能空格后面没有数字
+ */
+void
+myscanf(char *string, ...)
+{
+	int *p;       // 处理传入参数的中的地址
+	int flag = 0; // flag用于判断当前数字是否为负
+	int num = 0;  // 转换后的数字
+
+	// 可变参数初始化
+	va_list var_arg;
+	va_start(var_arg, string);
+	// 读取第一个参数
+	p = va_arg(var_arg, int* );
+
+	// 读取字符串
+	int i = 0;
+	if (string[i] == '-'){
+		flag = 1;
+		i++;
+	}
+	// 遍历字符串
+	for ( ; string[i] != '\0'; i++){
+		// 如果有空格，说明还有下一个参数(但是不能处理错误输入)
+		if ( string[i] == ' '){
+			if ( flag == 1 ){
+			    *p = -num;
+				flag = 0;
+			} else {
+			    *p = num;
+			}
+			// 如果是空格, 检查下一个字符是不是"-"
+			if (string[i+1] == '-'){
+				flag = 1;
+				i++;
+			}
+		    num = 0;
+	        p = va_arg(var_arg, int* );
+		} else{
+			// 流处理过程中将字符串转成数字
+		    num = num * 10 + (string[i] - '0');
+	    }
+	}
+
+	if ( flag == 1 ){
+	    *p = -num;
+	} else {
+	    *p = num;
+	}
+
+	va_end(var_arg);
+	return ;
+}
+
+
+int main(int argc, char *argv[])
+{
+
+	int m, n, j, k ;
+	myscanf("-123", &m);
+	printf("%d\n", m);
+	myscanf("123 12", &m, &n);
+	printf("%d\t%d\n", m, n);
+	myscanf("123 -12 789", &m, &n, &k);
+	printf("%d\t%d\t%d\n", m, n, k);
+
+	return 0;
+
+}
